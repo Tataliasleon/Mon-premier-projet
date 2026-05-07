@@ -1,14 +1,18 @@
+const express = require('express');
+const mongoose = require('mongoose'); // CETTE LIGNE EST CELLE QUI MANQUE !
+const app = express();
+
 const dbURI = process.env.MONGO_URI;
 const port = process.env.PORT || 10000;
 
+// Bloc de connexion
 mongoose.connect(dbURI)
   .then(() => {
-    console.log("✅ Connexion réussie à MongoDB Atlas !");
+    console.log("✅ Connexion MongoDB OK");
     app.listen(port, () => {
-      console.log(`🚀 Serveur M3 Pro actif sur le port ${port}`);
+      console.log(`🚀 Serveur actif sur le port ${port}`);
     });
   })
-  .catch((err) => {
-    console.error("❌ ERREUR DE CONNEXION :", err.message);
-    process.exit(1); // Force l'arrêt propre pour que Render affiche l'erreur
+  .catch(err => {
+    console.error("❌ Erreur de connexion :", err.message);
   });
