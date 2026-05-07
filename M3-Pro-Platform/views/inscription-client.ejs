@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
+        .card { background: #1e293b; padding: 30px; border-radius: 15px; width: 350px; border-top: 5px solid #38bdf8; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #38bdf8; color: #0f172a; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🎮 Rejoindre M3 Pro</h2>
+        <p>Inscris-toi pour recevoir tes 1000$ de départ.</p>
+        <form action="/client/register" method="POST">
+            <input type="text" name="pseudo" placeholder="Pseudo" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Créer mon compte</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+const utilisateurSchema = new mongoose.Schema({
+    pseudo: String,
+    email: { type: String, unique: true },
+    motDePasse: String,
+    solde: { type: Number, default: 1000 }, // On leur donne 1000$ fictifs
+    paris: Array // Liste de leurs paris futurs
+});
+
+const Utilisateur = mongoose.model('Utilisateur', utilisateurSchema);
