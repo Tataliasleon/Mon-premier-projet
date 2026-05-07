@@ -18,8 +18,7 @@ const Entreprise = mongoose.model('Entreprise', {
     chiffreAffaire: Number,
     cote: Number,
     statut: { type: String, default: "En attente" },
-    dateCreation: { type: Date, default: Date.now }
-});
+    const dbURI= process.env.MONGO_URI;
 
 // 3. CONFIGURATION DU SERVEUR
 app.set('view engine', 'ejs');
