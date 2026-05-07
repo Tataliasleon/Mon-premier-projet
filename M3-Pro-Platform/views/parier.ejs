@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
+        .bet-card { background: #1e293b; padding: 30px; border-radius: 15px; width: 400px; border-left: 5px solid #10b981; }
+        .cote-badge { background: #10b981; color: #0f172a; padding: 5px 10px; border-radius: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; margin: 20px 0; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: white; }
+        button { width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="bet-card">
+        <h2>🎯 Placer un pari</h2>
+        <p>Entreprise : <strong><%= entreprise.nom %></strong></p>
+        <p>Cote actuelle : <span class="cote-badge">x <%= entreprise.cote %></span></p>
+        
+        <form action="/parier/<%= entreprise._id %>" method="POST">
+            <label>Montant à miser ($) :</label>
+            <input type="number" name="montant" min="10" max="1000" required>
+            <button type="submit">Confirmer le pari</button>
+        </form>
+    </div>
+</body>
+</html>
