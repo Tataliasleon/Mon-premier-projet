@@ -1,22 +1,13 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
-const port = process.env.PORT || 10000;
+const path = require('path');
 
-// 1. PRIORITÉ VISUELLE : On dit au serveur d'utiliser le dossier public
-// C'est cette ligne qui va charger ton index.html design
-app.use(express.static('public'));
+// 1. CONFIGURATION DU MOTEUR DE RENDU (Si tu utilises EJS)
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// 2. CONNEXION À LA BASE DE DONNÉES
-const dbURI = process.env.MONGO_URI;
+// 2. PRIORITÉ : Servir les fichiers du dossier public
+app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect(dbURI)
-  .then(() => {
-    console.log("✅ Connexion MongoDB OK");
-    app.listen(port, () => {
-      console.log(`🚀 Serveur actif sur le port ${port}`);
-    });
-  })
-  .catch((err) => {
-    console.log("❌ Erreur de connexion :", err);
-  });
+// 3. FORCE L'AFFICHAGE DE TON INDEX.HTML SUR LA PAGE D'ACCUEIL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
