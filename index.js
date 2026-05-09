@@ -7,14 +7,14 @@ const port = process.env.PORT || 10000;
 
 // Bloc de connexion
 mongoose.connect(dbURI)
-  .then(() => {
-    console.log("✅ Connexion MongoDB OK"); app.get('/', (req, res) => {
-  res.send('Bienvenue sur mon API ! Le serveur est en ligne.');
-});
+ .then(() => {
+    console.log("✅ Connexion MongoDB OK");
+    
+    // Dis à Express d'utiliser ton dossier public
+    app.use(express.static('public'));
+
+    // Lance le serveur
     app.listen(port, () => {
       console.log(`🚀 Serveur actif sur le port ${port}`);
     });
   })
-  .catch(err => {
-    console.error("❌ Erreur de connexion :", err.message);
-  });
