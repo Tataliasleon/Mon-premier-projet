@@ -12,4 +12,4 @@ mongoose.connect(dbURI)
       console.log(`Serveur lancé sur le port ${port}`);
     });
   })
-  .catch((err) => console.log("Erreur de connexion :", err));
+  .catch((err) => console.log("Erreur de connexion :", err));app.use(express.static('public'));
