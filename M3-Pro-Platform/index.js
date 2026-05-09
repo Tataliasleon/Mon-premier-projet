@@ -1,15 +1,22 @@
-const Entreprise = mongoose.model('Entreprise', {
-    nom: String,
-    secteur: String,
-    chiffre: Number,
-    cote: { type: Number, default: 1.5 }
-});const dbURI = process.env.MONGO_URI;
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+const port = process.env.PORT || 10000;
+
+// 1. CONFIGURATION DES FICHIERS STATIQUES (Ton dossier public)
+// Doit être placé AVANT les routes pour que l'index.html soit prioritaire
+app.use(express.static('public'));
+
+// 2. CONNEXION BDD ET LANCEMENT SERVEUR
+const dbURI = process.env.MONGO_URI;
 
 mongoose.connect(dbURI)
   .then(() => {
-    console.log("Connecté à MongoDB !");
+    console.log("✅ Connexion MongoDB OK");
     app.listen(port, () => {
-      console.log(`Serveur lancé sur le port ${port}`);
+      console.log(`🚀 Serveur lancé sur le port ${port}`);
     });
   })
-  .catch((err) => console.log("Erreur de connexion :", err));app.use(express.static('public'));
+  .catch((err) => {
+    console.log("❌ Erreur de connexion :", err);
+  });
