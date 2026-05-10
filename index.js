@@ -1,20 +1,26 @@
 const express = require('express');
-const mongoose = require('mongoose'); // CETTE LIGNE EST CELLE QUI MANQUE !
+const mongoose = require('mongoose');
+const path = require('path');
 const app = express();
-
-const dbURI = process.env.MONGO_URI;
 const port = process.env.PORT || 10000;
 
-// Bloc de connexion
-mongoose.connect(dbURI)
- .then(() => {
-    console.log("✅ Connexion MongoDB OK");
-    
-    // Dis à Express d'utiliser ton dossier public
-    app.use(express.static('public'));
+// 1. CONFIGURATION DES DOSSIERS
+// Cette ligne dit à Express où trouver ton index.html
+app.use(express.static(path.join(__dirname, 'public')));
 
-    // Lance le serveur
+// 2. CONNEXION BDD ET LANCEMENT
+const dbURI = process.env.MONGO_URI;
+
+mongoose.connect(dbURI)
+  .then(() => {
+    console.log("✅ Connexion MongoDB OK");
     app.listen(port, () => {
       console.log(`🚀 Serveur actif sur le port ${port}`);
     });
   })
+  .catch((err) => console.log("❌ Erreur :", err));
+
+// 3. ROUTE DE SECOURS (Si le static ne suffit pas)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
