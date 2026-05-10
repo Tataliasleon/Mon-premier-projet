@@ -3,145 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3 Pro Platform | Trading Social</title>
+    <title>M3 Pro | Mobile Trading</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .hidden { display: none; }
-        .active-tab { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
+        .active-nav { color: #3b82f6 !important; }
+        body { padding-bottom: 70px; } /* Pour ne pas cacher le contenu par la barre du bas */
     </style>
 </head>
-<body class="bg-[#0f172a] text-slate-200 font-sans min-h-screen">
+<body class="bg-[#0b0f1a] text-slate-200 font-sans">
 
-    <nav class="border-b border-slate-800 bg-[#0f172a]/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white text-sm">M3</div>
-                <span class="text-xl font-bold tracking-tight text-white uppercase">Pro Platform</span>
-            </div>
-            <div class="hidden md:flex space-x-6 text-xs font-medium uppercase tracking-widest text-slate-400">
-                <button onclick="showPage('dashboard')" class="nav-link px-2 py-1">Dashboard</button>
-                <button onclick="showPage('entreprises')" class="nav-link px-2 py-1">Entreprises</button>
-                <button onclick="showPage('betting')" class="nav-link px-2 py-1">Paris / Investir</button>
-                <button onclick="showPage('profile')" class="nav-link px-2 py-1 bg-slate-800 rounded-md text-white">Mon Compte</button>
-            </div>
+    <nav class="bg-[#0b0f1a] p-4 flex justify-between items-center sticky top-0 z-40 border-b border-slate-800">
+        <div class="flex items-center gap-2" onclick="showPage('home')">
+            <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center font-bold text-white text-xs">M3</div>
+            <span class="font-bold tracking-tight uppercase text-sm">Pro Platform</span>
         </div>
+        <button onclick="showPage('auth')" class="text-xs bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+            <i class="fa-solid fa-user-plus mr-1"></i> Connexion
+        </button>
     </nav>
 
-    <main id="page-home" class="page-content py-20 px-6 text-center">
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tighter text-blue-500">L'avenir de la Finance en RDC</h1>
-        <p class="text-slate-400 text-xl mb-10 max-w-2xl mx-auto">La première plateforme de pari sur la réussite des jeunes entrepreneurs de Lubumbashi.</p>
-        <div class="flex gap-4 justify-center">
-            <button onclick="showPage('dashboard')" class="px-8 py-4 bg-blue-600 rounded-xl font-bold">Voir l'Indice</button>
-            <button onclick="showPage('auth')" class="px-8 py-4 bg-slate-800 rounded-xl font-bold">Créer un Compte</button>
+    <section id="page-home" class="page-content px-6 py-10">
+        <div class="bg-gradient-to-br from-blue-600/20 to-transparent p-6 rounded-3xl border border-blue-500/20 mb-6">
+            <h1 class="text-3xl font-black text-white mb-2">M3 INDEX</h1>
+            <p class="text-green-400 font-mono text-lg font-bold">1,420.50 USD <span class="text-xs">+12.4%</span></p>
+            <p class="text-slate-400 text-xs mt-2 italic">Basé sur les 30 meilleures startups de Lubumbashi.</p>
         </div>
-    </main>
-
-    <section id="page-dashboard" class="page-content hidden py-12 px-6 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-8">Statistiques de l'Indice M3</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <p class="text-slate-400 text-xs uppercase mb-1">Valeur M3</p>
-                <p class="text-3xl font-bold text-green-400">1,420.50 USD</p>
-            </div>
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <p class="text-slate-400 text-xs uppercase mb-1">Volume 24h</p>
-                <p class="text-3xl font-bold text-white">45,000 USD</p>
-            </div>
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <p class="text-slate-400 text-xs uppercase mb-1">Paris Actifs</p>
-                <p class="text-3xl font-bold text-blue-500">128</p>
-            </div>
-        </div>
+        <button onclick="showPage('betting')" class="w-full bg-blue-600 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/30">
+            COMMENCER À PARIER
+        </button>
     </section>
 
-    <section id="page-entreprises" class="page-content hidden py-12 px-6 max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-bold">Top 30 Entreprises</h2>
-            <button class="bg-blue-600 px-4 py-2 rounded-lg text-xs font-bold uppercase">Ajouter la mienne</button>
-        </div>
-        <div class="grid gap-4">
-            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-slate-800 rounded flex items-center justify-center font-bold">LT</div>
+    <section id="page-entreprises" class="page-content hidden px-4 py-6">
+        <h2 class="text-xl font-bold mb-4 px-2">Entreprises Candidates</h2>
+        <div class="space-y-3">
+            <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 font-bold">L</div>
                     <div>
-                        <p class="font-bold">Lubum Tech</p>
-                        <p class="text-xs text-slate-500 italic">Secteur: Web Design</p>
+                        <p class="font-bold text-sm">Lubum Tech</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest">Fondateur: 14 ans</p>
                     </div>
                 </div>
-                <div class="text-right">
-                    <p class="text-blue-500 font-bold">Fondateur: 14 ans</p>
-                    <button onclick="showPage('betting')" class="text-xs underline text-slate-400 hover:text-white">Parier sur cette startup</button>
+                <button onclick="goToBet('Lubum Tech')" class="text-[10px] bg-slate-800 px-3 py-2 rounded-lg font-bold text-blue-400">PARIER</button>
+            </div>
+            <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center text-purple-500 font-bold">C</div>
+                    <div>
+                        <p class="font-bold text-sm">Congo Style</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest">Fondateur: 13 ans</p>
+                    </div>
                 </div>
+                <button onclick="goToBet('Congo Style')" class="text-[10px] bg-slate-800 px-3 py-2 rounded-lg font-bold text-blue-400">PARIER</button>
             </div>
         </div>
     </section>
 
-    <section id="page-betting" class="page-content hidden py-12 px-6 max-w-4xl mx-auto">
-        <div class="bg-blue-600/10 border border-blue-600/20 p-8 rounded-3xl text-center">
-            <h2 class="text-3xl font-bold mb-4 italic text-blue-400">Placez vos Paris</h2>
-            <p class="text-slate-400 mb-8">Choisissez une entreprise et pariez sur sa croissance mensuelle.</p>
-            <div class="space-y-4 max-w-sm mx-auto">
-                <select class="w-full bg-slate-800 p-4 rounded-xl border border-slate-700 outline-none">
-                    <option>Sélectionner une entreprise...</option>
+    <section id="page-betting" class="page-content hidden px-4 py-6">
+        <div class="bg-blue-600 p-6 rounded-3xl mb-6">
+            <h2 class="text-xl font-bold text-white mb-1">Passer un Pari</h2>
+            <p class="text-blue-100 text-xs">Misez sur la croissance des startups.</p>
+        </div>
+        <div class="space-y-4">
+            <div>
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Startup sélectionnée</label>
+                <select id="bet-startup" class="w-full bg-slate-900 p-4 rounded-2xl border border-slate-800 outline-none mt-1">
                     <option>Lubum Tech</option>
-                    <option>Congo Design</option>
+                    <option>Congo Style</option>
                 </select>
-                <input type="number" placeholder="Montant (USD)" class="w-full bg-slate-800 p-4 rounded-xl border border-slate-700 outline-none">
-                <button onclick="alert('Pari validé !')" class="w-full bg-blue-600 py-4 rounded-xl font-bold hover:bg-blue-700">Valider l'Investissement</button>
             </div>
+            <div>
+                <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Montant (USD)</label>
+                <input type="number" placeholder="Min. 5 USD" class="w-full bg-slate-900 p-4 rounded-2xl border border-slate-800 outline-none mt-1">
+            </div>
+            <button onclick="confirmBet()" class="w-full bg-green-500 py-4 rounded-2xl font-bold text-[#0b0f1a] text-sm uppercase tracking-widest mt-4">
+                Confirmer l'Investissement
+            </button>
         </div>
     </section>
 
-    <section id="page-profile" class="page-content hidden py-12 px-6 max-w-4xl mx-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-            <div class="h-32 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
-            <div class="px-8 pb-8">
-                <div class="relative flex justify-between items-end -mt-12 mb-6">
-                    <div class="w-24 h-24 bg-slate-800 border-4 border-[#0f172a] rounded-2xl flex items-center justify-center text-4xl font-bold">L</div>
-                    <button class="bg-slate-800 px-4 py-2 rounded-lg text-xs font-bold border border-slate-700">Modifier Profil</button>
-                </div>
-                <h3 class="text-2xl font-bold">Léonidas</h3>
-                <p class="text-slate-400 mb-6 italic">Entrepreneur & Trader M3</p>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-slate-800/50 p-4 rounded-xl">
-                        <p class="text-xs text-slate-500 uppercase">Solde Portefeuille</p>
-                        <p class="text-xl font-bold text-green-400">2,500.00 USD</p>
-                    </div>
-                    <div class="bg-slate-800/50 p-4 rounded-xl">
-                        <p class="text-xs text-slate-500 uppercase">Paris en cours</p>
-                        <p class="text-xl font-bold text-blue-400">3 actifs</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section id="page-auth" class="page-content hidden px-6 py-10">
+        <button onclick="showPage('home')" class="text-slate-500 text-sm mb-6 inline-block">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Retour
+        </button>
+        <h2 class="text-2xl font-bold mb-2">Nouveau Compte</h2>
+        <p class="text-slate-500 text-sm mb-8">Rejoignez la communauté M3 Pro.</p>
+        <form class="space-y-4" onsubmit="handleSignup(event)">
+            <input type="text" placeholder="Pseudo" class="w-full bg-slate-900 p-4 rounded-2xl border border-slate-800 outline-none" required>
+            <input type="password" placeholder="Mot de passe" class="w-full bg-slate-900 p-4 rounded-2xl border border-slate-800 outline-none" required>
+            <button type="submit" class="w-full bg-blue-600 py-4 rounded-2xl font-bold mt-4">CRÉER MON COMPTE</button>
+        </form>
     </section>
 
-    <section id="page-auth" class="page-content hidden py-20 px-6 max-w-md mx-auto">
-        <div class="bg-slate-900 p-8 rounded-3xl border border-slate-800 shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center">Créer un Compte M3</h2>
-            <form onsubmit="event.preventDefault(); showPage('profile');">
-                <div class="space-y-4">
-                    <input type="text" placeholder="Nom complet" class="w-full bg-slate-800 p-4 rounded-xl border border-slate-700 outline-none" required>
-                    <input type="email" placeholder="Email" class="w-full bg-slate-800 p-4 rounded-xl border border-slate-700 outline-none" required>
-                    <input type="password" placeholder="Mot de passe" class="w-full bg-slate-800 p-4 rounded-xl border border-slate-700 outline-none" required>
-                    <button type="submit" class="w-full bg-blue-600 py-4 rounded-xl font-bold shadow-lg shadow-blue-600/20">S'inscrire Maintenant</button>
-                </div>
-            </form>
+    <section id="page-profile" class="page-content hidden px-6 py-10">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-slate-800 rounded-3xl mx-auto flex items-center justify-center text-3xl font-bold border border-slate-700 mb-4">L</div>
+            <h2 class="text-xl font-bold italic">Léonidas</h2>
+            <p class="text-slate-500 text-xs uppercase tracking-widest">Membre Fondateur</p>
         </div>
+        <div class="grid grid-cols-2 gap-4 mt-8">
+            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                <p class="text-[10px] text-slate-500 mb-1 uppercase">Solde</p>
+                <p class="font-bold text-green-400">500.00 $</p>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                <p class="text-[10px] text-slate-500 mb-1 uppercase">Paris</p>
+                <p class="font-bold">0 actifs</p>
+            </div>
+        </div>
+        <button onclick="showPage('home')" class="w-full mt-10 text-slate-500 text-xs underline">Déconnexion</button>
     </section>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-[#0b0f1a] border-t border-slate-800 flex justify-around items-center py-3 z-50">
+        <button onclick="showPage('home')" id="nav-home" class="flex flex-col items-center gap-1 text-slate-500 active-nav">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-bold">Home</span>
+        </button>
+        <button onclick="showPage('entreprises')" id="nav-entreprises" class="flex flex-col items-center gap-1 text-slate-500">
+            <i class="fa-solid fa-list text-lg"></i>
+            <span class="text-[10px] font-bold">Startups</span>
+        </button>
+        <button onclick="showPage('betting')" id="nav-betting" class="flex flex-col items-center gap-1 text-slate-500">
+            <i class="fa-solid fa-chart-line text-lg"></i>
+            <span class="text-[10px] font-bold">Parier</span>
+        </button>
+        <button onclick="showPage('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-slate-500">
+            <i class="fa-solid fa-wallet text-lg"></i>
+            <span class="text-[10px] font-bold">Profil</span>
+        </button>
+    </footer>
 
     <script>
         function showPage(pageId) {
-            // Cacher toutes les pages
+            // Cacher les pages
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            // Afficher la page demandée
+            // Afficher la cible
             document.getElementById('page-' + pageId).classList.remove('hidden');
-            // Gérer le style des liens nav
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-tab'));
-            window.scrollTo(0, 0);
+            
+            // Gérer les icônes actives en bas
+            document.querySelectorAll('footer button').forEach(btn => btn.classList.remove('active-nav'));
+            const activeNav = document.getElementById('nav-' + pageId);
+            if(activeNav) activeNav.classList.add('active-nav');
+            
+            window.scrollTo(0,0);
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            alert("✅ Compte créé avec succès ! Bienvenue Léonidas.");
+            showPage('profile'); // Redirection automatique vers le profil
+        }
+
+        function goToBet(startupName) {
+            document.getElementById('bet-startup').value = startupName;
+            showPage('betting');
+        }
+
+        function confirmBet() {
+            alert("💰 Pari enregistré ! Bonne chance.");
+            showPage('profile'); // Retour au profil pour voir ses stats
         }
     </script>
-
 </body>
 </html>
