@@ -1,61 +1,44 @@
-<section id="page-auth" class="page-content hidden px-6 py-10">
-    <div class="bg-[#161e2f] p-8 rounded-3xl border border-yellow-500/20 shadow-2xl text-center">
-        <h2 class="text-2xl font-black mb-6 text-yellow-500 uppercase italic">Join M3 Pro</h2>
-        <form class="space-y-4" onsubmit="handleRegister(event)">
-            <input type="text" id="reg-username" placeholder="Pseudo" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 outline-none focus:border-yellow-500 text-white" required>
-            <input type="password" placeholder="Mot de passe" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 outline-none focus:border-yellow-500 text-white">
-            <button type="submit" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black uppercase tracking-widest text-sm">Créer mon compte</button>
-        </form>
-    </div>
-</section>
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const app = express();
 
-<script>
-    // Variable pour stocker l'utilisateur connecté pendant la session
-    let currentUser = { username: "Invité", balance: 0 };
+app.use(express.json());
+app.use(express.static('public'));
 
-    async function handleRegister(event) {
-        event.preventDefault();
-        const username = document.getElementById('reg-username').value;
+// CONNEXION MONGODB
+const mongoURI = process.env.MONGO_URI || "TON_LIEN_MONGODB_ATLAS";
+mongoose.connect(mongoURI)
+    .then(() => console.log("✅ MongoDB Connecté"))
+    .catch(err => console.error("❌ Erreur MongoDB:", err));
 
-        try {
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username })
-            });
+// --- MODÈLES ---
+const Startup = mongoose.model('Startup', new mongoose.Schema({
+    name: String, age: Number, sector: String, description: String, createdAt: { type: Date, default: Date.now }
+}));
 
-            if (response.ok) {
-                const userData = await response.json();
-                currentUser = userData; // On stocke les vraies données reçues de la DB
-                
-                // Mise à jour visuelle immédiate
-                updateUI();
-                alert(`Bienvenue ${userData.username} ! Ton compte a été créé en base de données.`);
-                showPage('profile');
-            }
-        } catch (err) {
-            alert("Erreur de connexion au serveur");
-        }
-    }
+const User = mongoose.model('User', new mongoose.Schema({
+    username: String, balance: { type: Number, default: 2500 }, createdAt: { type: Date, default: Date.now }
+}));
 
-    function updateUI() {
-        // Met à jour le nom dans le profil
-        const profileName = document.querySelector('#page-profile h2');
-        const profileBalance = document.querySelector('#page-profile .text-3xl');
-        const navBalance = document.querySelector('nav .text-yellow-500');
+// --- ROUTES API ---
 
-        if(profileName) profileName.innerText = currentUser.username;
-        if(profileBalance) profileBalance.innerText = currentUser.balance.toLocaleString() + " $";
-        if(navBalance) navBalance.innerText = currentUser.balance.toLocaleString() + " $";
-    }
+// Startups : Récupérer, Ajouter, Supprimer
+app.get('/api/startups', async (req, res) => res.json(await Startup.find().sort({createdAt: -1})));
+app.post('/api/add-startup', async (req, res) => {
+    const s = new Startup(req.body); await s.save(); res.status(201).json(s);
+});
+app.delete('/api/delete-startup/:id', async (req, res) => {
+    await Startup.findByIdAndDelete(req.params.id); res.json({message: "OK"});
+});
 
-    // Garde le reste de tes fonctions (showPage, loadStartups, etc.) ici...
-    function showPage(pageId) {
-        document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-        document.getElementById('page-' + pageId).classList.remove('hidden');
-        if(pageId === 'entreprises') loadStartups();
-        window.scrollTo(0,0);
-    }
-    
-    // ... (inclure loadStartups, handleAddStartup, deleteStartup du code précédent)
-</script>
+// Utilisateurs : Inscription
+app.post('/api/register', async (req, res) => {
+    try {
+        const u = new User({ username: req.body.username });
+        await u.save(); res.status(201).json(u);
+    } catch (err) { res.status(400).json({error: "Erreur"}); }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Serveur M3 Pro sur port ${PORT}`));
