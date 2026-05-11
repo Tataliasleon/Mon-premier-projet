@@ -1,62 +1,46 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(express.static('public'));
 
-// CONNEXION MONGODB
-// Remplace "TON_LIEN_MONGODB_ATLAS" par ton vrai lien si tu n'utilises pas de variable d'environnement
 const mongoURI = process.env.MONGO_URI || "TON_LIEN_MONGODB_ATLAS";
-mongoose.connect(mongoURI)
-    .then(() => console.log("✅ Connecté à MongoDB Atlas"))
-    .catch(err => console.error("❌ Erreur de connexion:", err));
+mongoose.connect(mongoURI).then(() => console.log("✅ MongoDB Connecté"));
 
-// MODÈLE DE DONNÉES (STARTUP)
-const StartupSchema = new mongoose.Schema({
-    name: String,
-    age: Number,
-    sector: String,
-    description: String,
+// --- MODÈLES ---
+const Startup = mongoose.model('Startup', new mongoose.Schema({
+    name: String, age: Number, sector: String, description: String
+}));
+
+// Nouveau modèle Utilisateur
+const User = mongoose.model('User', new mongoose.Schema({
+    username: String,
+    balance: { type: Number, default: 2500 }, // Solde de départ par défaut
     createdAt: { type: Date, default: Date.now }
-});
-const Startup = mongoose.model('Startup', StartupSchema);
+}));
 
-// --- ROUTES API ---
-
-// 1. Récupérer toutes les entreprises
-app.get('/api/startups', async (req, res) => {
-    try {
-        const startups = await Startup.find().sort({ createdAt: -1 });
-        res.json(startups);
-    } catch (err) {
-        res.status(500).json({ error: "Erreur lors de la récupération" });
-    }
-});
-
-// 2. Ajouter une entreprise
+// --- ROUTES STARTUPS ---
+app.get('/api/startups', async (req, res) => res.json(await Startup.find().sort({createdAt: -1})));
 app.post('/api/add-startup', async (req, res) => {
-    try {
-        const newStartup = new Startup(req.body);
-        await newStartup.save();
-        res.status(201).json({ message: "Startup ajoutée !" });
-    } catch (err) {
-        res.status(400).json({ error: "Données invalides" });
-    }
+    await new Startup(req.body).save();
+    res.status(201).json({ message: "OK" });
 });
-
-// 3. Supprimer une entreprise par ID
 app.delete('/api/delete-startup/:id', async (req, res) => {
+    await Startup.findByIdAndDelete(req.params.id);
+    res.json({ message: "Supprimé" });
+});
+
+// --- ROUTES UTILISATEURS ---
+app.post('/api/register', async (req, res) => {
     try {
-        await Startup.findByIdAndDelete(req.params.id);
-        res.json({ message: "Supprimée avec succès" });
+        const newUser = new User({ username: req.body.username });
+        await newUser.save();
+        res.status(201).json(newUser); // Renvoie l'utilisateur créé
     } catch (err) {
-        res.status(500).json({ error: "Erreur lors de la suppression" });
+        res.status(400).json({ error: "Erreur inscription" });
     }
 });
 
-// Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 M3 Pro Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Serveur actif sur port ${PORT}`));
