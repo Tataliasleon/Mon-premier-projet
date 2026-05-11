@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3 Pro Bet | Live Tech</title>
+    <title>M3 Pro Platform | Betting & Tech</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .hidden { display: none; }
         .side-menu { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
         .side-menu.open { transform: translateX(0); }
-        .active-nav { color: #facc15 !important; }
-        body { background-color: #050810; }
+        body { background-color: #050810; -webkit-tap-highlight-color: transparent; }
+        .bet-card:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="text-slate-200 font-sans pb-24">
@@ -44,28 +44,31 @@
             <button onclick="toggleMenu()" class="text-xl text-white">
                 <i class="fa-solid fa-bars-staggered"></i>
             </button>
-            <span class="font-black italic text-xl">M3<span class="text-yellow-500 underline">BET</span></span>
+            <span class="font-black italic text-xl uppercase">M3<span class="text-yellow-500">Bet</span></span>
         </div>
         <div class="flex items-center gap-3">
-            <span class="text-yellow-500 font-bold text-xs">0.00 $</span>
-            <button onclick="showPage('auth')" class="bg-yellow-500 text-black px-3 py-1 rounded font-black text-[10px] uppercase">JOIN</button>
+            <span class="text-yellow-500 font-bold text-xs">2,500 $</span>
+            <button onclick="showPage('auth')" class="bg-yellow-500 text-black px-3 py-1 rounded font-black text-[10px] uppercase">Join</button>
         </div>
     </nav>
 
     <section id="page-home" class="page-content px-4 py-6">
         <div class="bg-gradient-to-r from-yellow-600 to-yellow-400 p-6 rounded-2xl text-black mb-6 shadow-lg">
-            <h3 class="text-2xl font-black uppercase tracking-tighter leading-none">Indice M3 Live</h3>
-            <p class="text-xs font-bold mt-1">Misez sur les futurs géants de la RDC.</p>
+            <h3 class="text-2xl font-black uppercase italic leading-none">Indice Live</h3>
+            <p class="text-[10px] font-bold mt-1 uppercase opacity-80">Misez sur le génie de Lubumbashi</p>
         </div>
         
-        <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Paris Populaires</h2>
-        <div id="betting-list" class="space-y-3">
-            <div class="bg-[#161e2f] border border-slate-800 rounded-xl p-4">
+        <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Top Paris du jour</h2>
+        <div class="space-y-3">
+            <div class="bg-[#161e2f] border border-slate-800 rounded-xl p-4 bet-card">
                 <div class="flex justify-between items-center">
-                    <p class="font-bold text-sm">Startup Index <span class="block text-[10px] font-normal text-slate-400">Croissance Mensuelle</span></p>
+                    <div>
+                        <p class="font-bold text-sm">Croissance Globale M3</p>
+                        <p class="text-[9px] text-slate-500">Indice cumulé des 30 startups</p>
+                    </div>
                     <div class="flex gap-2">
-                        <button onclick="selectOdd('M3 Index', '1.85')" class="bg-slate-800 px-4 py-3 rounded-lg text-xs font-black hover:bg-yellow-500 hover:text-black transition-all">1.85</button>
-                        <button onclick="selectOdd('M3 Index', '2.40')" class="bg-slate-800 px-4 py-3 rounded-lg text-xs font-black hover:bg-yellow-500 hover:text-black transition-all">2.40</button>
+                        <button onclick="selectOdd('Indice M3', '1.85')" class="bg-slate-800 px-4 py-3 rounded-lg text-xs font-black border border-slate-700 active:bg-yellow-500">1.85</button>
+                        <button onclick="selectOdd('Indice M3', '2.40')" class="bg-slate-800 px-4 py-3 rounded-lg text-xs font-black border border-slate-700 active:bg-yellow-500">2.40</button>
                     </div>
                 </div>
             </div>
@@ -73,54 +76,53 @@
     </section>
 
     <section id="page-add-startup" class="page-content hidden px-6 py-8">
-        <h2 class="text-2xl font-black mb-2 italic">INSCRIRE MA TECH</h2>
-        <p class="text-slate-500 text-sm mb-8 italic">Soumettez votre projet pour la cotation en direct.</p>
+        <h2 class="text-2xl font-black mb-6 italic uppercase">Inscrire ma Tech</h2>
         <form class="space-y-4" onsubmit="handleAddStartup(event)">
             <input type="text" id="s-name" placeholder="Nom de l'entreprise" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none focus:border-green-500" required>
             <input type="number" id="s-age" placeholder="Âge du fondateur" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
-            <input type="text" id="s-sector" placeholder="Secteur (Web, Mode, etc.)" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
+            <input type="text" id="s-sector" placeholder="Secteur (ex: Fintech, Agri...)" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
             <textarea id="s-desc" placeholder="Description courte..." class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none h-24" required></textarea>
-            <button type="submit" class="w-full bg-green-600 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg shadow-green-900/20">Valider l'Inscription</button>
+            <button type="submit" class="w-full bg-green-600 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg">Enregistrer dans la DB</button>
         </form>
     </section>
 
     <section id="page-entreprises" class="page-content hidden px-4 py-6">
-        <h2 class="text-xl font-bold mb-6 text-center italic uppercase tracking-tighter">Annuaire des Candidats</h2>
+        <h2 class="text-xl font-black mb-6 italic uppercase">Startups en Liste</h2>
         <div id="startups-list" class="grid grid-cols-2 gap-4">
             </div>
     </section>
 
     <section id="page-auth" class="page-content hidden px-6 py-10">
-        <div class="bg-[#161e2f] p-8 rounded-3xl border border-yellow-500/20 shadow-2xl">
-            <h2 class="text-2xl font-black text-center mb-6 text-yellow-500 uppercase italic">Join M3 Pro</h2>
-            <form class="space-y-4" onsubmit="event.preventDefault(); alert('Bienvenue dans l\'élite !'); showPage('profile');">
-                <input type="text" placeholder="Pseudo / Username" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 outline-none focus:border-yellow-500">
+        <div class="bg-[#161e2f] p-8 rounded-3xl border border-yellow-500/20 shadow-2xl text-center">
+            <h2 class="text-2xl font-black mb-6 text-yellow-500 uppercase italic">Rejoindre M3 Pro</h2>
+            <form class="space-y-4" onsubmit="event.preventDefault(); showPage('profile');">
+                <input type="text" placeholder="Pseudo" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 outline-none focus:border-yellow-500">
                 <input type="password" placeholder="Mot de passe" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 outline-none focus:border-yellow-500">
-                <button type="submit" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black uppercase tracking-widest text-sm">Ouvrir mon Compte</button>
+                <button type="submit" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black uppercase tracking-widest text-sm">Créer mon compte</button>
             </form>
         </div>
     </section>
 
     <section id="page-profile" class="page-content hidden p-6 text-center">
-        <div class="w-24 h-24 bg-slate-800 rounded-2xl mx-auto flex items-center justify-center text-4xl border-4 border-yellow-500 mb-4 shadow-xl">L</div>
-        <h2 class="text-2xl font-black uppercase tracking-tighter">Léonidas</h2>
-        <p class="text-yellow-500 text-xs font-black mb-8 uppercase tracking-widest italic">Trader Elite</p>
-        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-inner">
-            <p class="text-xs text-slate-500 mb-1 font-bold">PORTEFEUILLE</p>
-            <p class="text-4xl font-black italic">2,500.00 $</p>
+        <div class="w-24 h-24 bg-slate-800 rounded-full mx-auto flex items-center justify-center text-4xl border-4 border-yellow-500 mb-4 shadow-xl font-black">L</div>
+        <h2 class="text-2xl font-black uppercase italic">Léonidas</h2>
+        <p class="text-yellow-500 text-[10px] font-black mb-8 uppercase tracking-[0.2em]">Trader Certifié</p>
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <p class="text-[10px] text-slate-500 mb-1 font-bold uppercase">Solde Total</p>
+            <p class="text-3xl font-black italic">2,500.00 $</p>
         </div>
     </section>
 
     <footer class="fixed bottom-0 left-0 w-full bg-[#0f172a] border-t border-slate-800 flex justify-around py-4 z-50">
         <button onclick="showPage('home')" class="text-slate-500 hover:text-yellow-500"><i class="fa-solid fa-trophy text-lg"></i></button>
         <button onclick="showPage('entreprises')" class="text-slate-500 hover:text-yellow-500"><i class="fa-solid fa-list-ul text-lg"></i></button>
-        <button onclick="showPage('add-startup')" class="text-slate-400 hover:text-green-500 text-2xl transition-all transform hover:scale-110"><i class="fa-solid fa-circle-plus"></i></button>
+        <button onclick="showPage('add-startup')" class="text-slate-400 hover:text-green-500 text-2xl transition-all"><i class="fa-solid fa-circle-plus"></i></button>
         <button onclick="showPage('profile')" class="text-slate-500 hover:text-yellow-500"><i class="fa-solid fa-user text-lg"></i></button>
     </footer>
 
     <div id="bet-slip" class="fixed bottom-20 left-4 right-4 bg-yellow-500 text-black p-4 rounded-xl font-black flex justify-between items-center hidden z-[70] shadow-2xl">
-        <span id="bet-info" class="text-xs uppercase">Sélectionnez une cote</span>
-        <button onclick="alert('💰 Pari validé !'); document.getElementById('bet-slip').classList.add('hidden');" class="bg-black text-white px-4 py-2 rounded-lg uppercase text-[10px] tracking-widest">Confirmer</button>
+        <span id="bet-info" class="text-xs uppercase">Pari</span>
+        <button onclick="confirmBet()" class="bg-black text-white px-4 py-2 rounded-lg uppercase text-[10px] tracking-widest">Parier</button>
     </div>
 
     <script>
@@ -132,7 +134,7 @@
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.getElementById('page-' + pageId).classList.remove('hidden');
-            if(pageId === 'entreprises') loadStartups(); // Charger les vraies données
+            if(pageId === 'entreprises') loadStartups();
             window.scrollTo(0,0);
         }
 
@@ -141,35 +143,39 @@
             document.getElementById('bet-slip').classList.remove('hidden');
         }
 
-        // --- PARTIE RÉELLE (COMMUNICATION AVEC LE SERVEUR) ---
+        function confirmBet() {
+            alert("💰 Pari validé avec succès !");
+            document.getElementById('bet-slip').classList.add('hidden');
+        }
+
+        // --- FONCTIONS SERVEUR ---
 
         async function loadStartups() {
             const container = document.getElementById('startups-list');
-            container.innerHTML = "<p class='col-span-2 text-slate-500 italic'>Chargement des données...</p>";
-            
+            container.innerHTML = "<p class='col-span-2 text-slate-500 text-xs italic'>Chargement...</p>";
             try {
                 const response = await fetch('/api/startups');
                 const startups = await response.json();
                 
                 if (startups.length === 0) {
-                    container.innerHTML = "<p class='col-span-2 text-slate-500'>Aucune startup enregistrée.</p>";
+                    container.innerHTML = "<p class='col-span-2 text-slate-500 text-xs italic'>Aucune donnée.</p>";
                     return;
                 }
 
                 container.innerHTML = startups.map(s => `
-                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-lg">
-                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg mx-auto mb-2 flex items-center justify-center font-black text-blue-500">
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 relative shadow-lg">
+                        <button onclick="deleteStartup('${s._id}')" class="absolute top-2 right-2 text-red-600/50 hover:text-red-500">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i>
+                        </button>
+                        <div class="w-10 h-10 bg-blue-500/10 rounded-lg mx-auto mb-2 flex items-center justify-center font-black text-blue-500 text-xs">
                             ${s.name.substring(0,2).toUpperCase()}
                         </div>
-                        <p class="text-[11px] font-black uppercase text-white truncate">${s.name}</p>
-                        <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Âge: ${s.age} ans</p>
-                        <div class="mt-3 pt-2 border-t border-slate-800">
-                             <p class="text-[8px] text-yellow-500 font-black uppercase">${s.sector}</p>
-                        </div>
+                        <p class="text-[10px] font-black uppercase text-white truncate">${s.name}</p>
+                        <p class="text-[8px] text-slate-500 font-bold mt-1">${s.sector}</p>
                     </div>
                 `).join('');
             } catch (err) {
-                container.innerHTML = "<p class='text-red-400'>Erreur de connexion au serveur.</p>";
+                container.innerHTML = "<p class='text-red-500 text-xs'>Erreur de connexion</p>";
             }
         }
 
@@ -182,21 +188,22 @@
                 description: document.getElementById('s-desc').value
             };
 
-            try {
-                const response = await fetch('/api/add-startup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
+            const response = await fetch('/api/add-startup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-                if (response.ok) {
-                    alert("🚀 Enregistré ! La startup est maintenant dans le cloud M3.");
-                    showPage('entreprises');
-                } else {
-                    alert("❌ Erreur lors de l'enregistrement.");
-                }
-            } catch (err) {
-                alert("❌ Le serveur ne répond pas.");
+            if (response.ok) {
+                alert("🚀 Startup enregistrée avec succès !");
+                showPage('entreprises');
+            }
+        }
+
+        async function deleteStartup(id) {
+            if (confirm("Supprimer cette entreprise ?")) {
+                const response = await fetch(`/api/delete-startup/${id}`, { method: 'DELETE' });
+                if (response.ok) loadStartups();
             }
         }
     </script>
