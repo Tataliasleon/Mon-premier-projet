@@ -3,17 +3,18 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 
-// Middleware pour lire le JSON envoyé par le site
+// Middleware
 app.use(express.json());
 app.use(express.static('public'));
 
-// Connexion à MongoDB (Utilise ta variable d'environnement Render ou ton lien Atlas)
-const mongoURI = process.env.MONGO_URI || "TON_LIEN_MONGODB_ATLAS_ICI";
+// CONNEXION MONGODB
+// Remplace "TON_LIEN_MONGODB_ATLAS" par ton vrai lien si tu n'utilises pas de variable d'environnement
+const mongoURI = process.env.MONGO_URI || "TON_LIEN_MONGODB_ATLAS";
 mongoose.connect(mongoURI)
     .then(() => console.log("✅ Connecté à MongoDB Atlas"))
     .catch(err => console.error("❌ Erreur de connexion:", err));
 
-// SCHÉMA POUR LES ENTREPRISES
+// MODÈLE DE DONNÉES (STARTUP)
 const StartupSchema = new mongoose.Schema({
     name: String,
     age: Number,
@@ -23,7 +24,9 @@ const StartupSchema = new mongoose.Schema({
 });
 const Startup = mongoose.model('Startup', StartupSchema);
 
-// ROUTE : Récupérer toutes les entreprises (pour l'annuaire)
+// --- ROUTES API ---
+
+// 1. Récupérer toutes les entreprises
 app.get('/api/startups', async (req, res) => {
     try {
         const startups = await Startup.find().sort({ createdAt: -1 });
@@ -33,16 +36,27 @@ app.get('/api/startups', async (req, res) => {
     }
 });
 
-// ROUTE : Ajouter une nouvelle entreprise
+// 2. Ajouter une entreprise
 app.post('/api/add-startup', async (req, res) => {
     try {
         const newStartup = new Startup(req.body);
         await newStartup.save();
         res.status(201).json({ message: "Startup ajoutée !" });
     } catch (err) {
-        res.status(400).json({ error: "Erreur lors de l'ajout" });
+        res.status(400).json({ error: "Données invalides" });
     }
 });
 
+// 3. Supprimer une entreprise par ID
+app.delete('/api/delete-startup/:id', async (req, res) => {
+    try {
+        await Startup.findByIdAndDelete(req.params.id);
+        res.json({ message: "Supprimée avec succès" });
+    } catch (err) {
+        res.status(500).json({ error: "Erreur lors de la suppression" });
+    }
+});
+
+// Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Serveur démarré sur le port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 M3 Pro Server running on port ${PORT}`));
