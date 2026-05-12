@@ -3,190 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3 Pro Platform | Finance RDC</title>
+    <title>M3 PRO | Live Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .hidden { display: none; }
-        .side-menu { transition: 0.3s ease; transform: translateX(-100%); }
+        .side-menu { transition: 0.3s; transform: translateX(-100%); }
         .side-menu.open { transform: translateX(0); }
-        body { background-color: #050810; color: #e2e8f0; }
-        .active-nav { color: #facc15 !important; }
+        body { background: #050810; color: white; }
     </style>
 </head>
-<body class="font-sans pb-24">
+<body class="pb-24">
 
-    <div id="side-menu" class="side-menu fixed inset-y-0 left-0 w-72 bg-[#0f172a] z-[60] border-r border-slate-800 shadow-2xl">
-        <div class="p-6 border-b border-slate-800 bg-yellow-500 text-black flex justify-between items-center">
-            <span class="font-black italic">M3 PRO MENU</span>
-            <button onclick="toggleMenu()" class="text-2xl">&times;</button>
-        </div>
-        <div class="p-4 space-y-1">
-            <button onclick="showPage('home'); toggleMenu()" class="w-full text-left p-4 hover:bg-slate-800 rounded-xl flex items-center gap-4"><i class="fa-solid fa-trophy text-yellow-500"></i> Accueil Paris</button>
-            <button onclick="showPage('add-startup'); toggleMenu()" class="w-full text-left p-4 hover:bg-slate-800 rounded-xl flex items-center gap-4 text-green-400 font-bold"><i class="fa-solid fa-circle-plus"></i> Inscrire Startup</button>
-            <button onclick="showPage('entreprises'); toggleMenu()" class="w-full text-left p-4 hover:bg-slate-800 rounded-xl flex items-center gap-4"><i class="fa-solid fa-list"></i> Annuaire</button>
-            <button onclick="showPage('auth'); toggleMenu()" class="w-full text-left p-4 hover:bg-slate-800 rounded-xl flex items-center gap-4 text-yellow-500"><i class="fa-solid fa-user-plus"></i> Créer Compte</button>
+    <div id="side-menu" class="side-menu fixed inset-y-0 left-0 w-72 bg-[#0f172a] z-[60] border-r border-slate-800">
+        <div class="p-6 bg-yellow-500 text-black font-black italic flex justify-between">M3 PRO <button onclick="toggleMenu()">&times;</button></div>
+        <div class="p-4 space-y-2">
+            <button onclick="showPage('home')" class="w-full text-left p-3 hover:bg-slate-800 rounded"><i class="fa-solid fa-house"></i> Paris</button>
+            <button onclick="showPage('add-startup')" class="w-full text-left p-3 hover:bg-slate-800 rounded"><i class="fa-solid fa-plus"></i> Inscrire Startup</button>
+            <button onclick="showPage('admin')" class="w-full text-left p-3 hover:bg-red-900 rounded text-red-400 font-bold"><i class="fa-solid fa-lock"></i> Admin Dashboard</button>
         </div>
     </div>
-    <div id="overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black/70 z-[50] hidden"></div>
 
-    <nav class="bg-[#0f172a] p-4 flex justify-between items-center sticky top-0 z-40 border-b border-yellow-500/20">
-        <div class="flex items-center gap-4">
-            <button onclick="toggleMenu()" class="text-xl"><i class="fa-solid fa-bars-staggered"></i></button>
-            <span class="font-black italic text-xl">M3<span class="text-yellow-500">BET</span></span>
-        </div>
-        <div class="flex items-center gap-3">
-            <span id="nav-balance" class="text-yellow-500 font-bold text-xs">2,500 $</span>
-            <button onclick="showPage('auth')" class="bg-yellow-500 text-black px-3 py-1 rounded font-black text-[10px] uppercase italic">Join</button>
-        </div>
+    <nav class="p-4 bg-[#0f172a] border-b border-yellow-500/20 flex justify-between sticky top-0 z-50">
+        <button onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+        <div class="font-black italic">M3 <span class="text-yellow-500">BET</span></div>
+        <div id="user-display" class="text-yellow-500 font-bold text-xs pt-1">0.00 $</div>
     </nav>
 
-    <main class="p-4">
-        <section id="page-home" class="page-content">
-            <div class="bg-gradient-to-br from-yellow-600 to-yellow-400 p-6 rounded-2xl text-black mb-6 shadow-xl">
-                <h2 class="text-2xl font-black italic uppercase leading-none">Indice Live</h2>
-                <p class="text-[10px] font-bold mt-1 uppercase opacity-80">Misez sur le futur de la RDC</p>
+    <section id="page-home" class="page-content p-4">
+        <h2 class="text-xs font-bold text-slate-500 uppercase mb-4">Paris disponibles sur les Startups</h2>
+        <div id="live-bets-container" class="space-y-4">
             </div>
-            <div class="space-y-3">
-                <div class="bg-[#161e2f] border border-slate-800 rounded-xl p-4 flex justify-between items-center">
-                    <div><p class="font-bold text-sm">Indice M3 Global</p><p class="text-[9px] text-slate-500 uppercase">Croissance Tech</p></div>
-                    <div class="flex gap-2">
-                        <button onclick="selectOdd('Indice M3', '1.85')" class="bg-slate-800 px-4 py-3 rounded-lg text-xs font-black border border-slate-700">1.85</button>
-                        <button onclick="selectOdd('Indice M3', '2.40')" class="bg-slate-800 px-4 py-3 rounded-lg text-xs font-black border border-slate-700">2.40</button>
-                    </div>
-                </div>
+    </section>
+
+    <section id="page-admin" class="page-content hidden p-4">
+        <h2 class="text-xl font-black mb-6 uppercase italic text-red-500">Gestion des Comptes</h2>
+        <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-slate-800 text-slate-400">
+                    <tr><th class="p-3">Pseudo</th><th class="p-3">Solde</th></tr>
+                </thead>
+                <tbody id="admin-user-list"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <div id="bet-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-6">
+        <div class="bg-[#161e2f] w-full max-w-sm rounded-3xl p-8 border border-yellow-500/30">
+            <h3 id="bet-target" class="text-xl font-black italic mb-2">Startup Name</h3>
+            <p class="text-slate-500 text-xs mb-6">Entrez votre mise pour ce pari</p>
+            <input type="number" id="bet-amount" value="100" class="w-full bg-[#050810] border border-slate-700 p-4 rounded-xl text-2xl font-black text-yellow-500 mb-6 outline-none">
+            <div class="flex gap-3">
+                <button onclick="closeBet()" class="flex-1 bg-slate-800 py-4 rounded-xl font-bold">Annuler</button>
+                <button onclick="confirmRealBet()" class="flex-1 bg-yellow-500 text-black py-4 rounded-xl font-black uppercase">Parier</button>
             </div>
-        </section>
-
-        <section id="page-add-startup" class="page-content hidden py-4">
-            <h2 class="text-xl font-black mb-6 uppercase italic border-l-4 border-green-500 pl-3">Inscrire ma Tech</h2>
-            <form class="space-y-4" onsubmit="handleAddStartup(event)">
-                <input type="text" id="s-name" placeholder="Nom Entreprise" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none focus:border-green-500" required>
-                <input type="number" id="s-age" placeholder="Âge Fondateur" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
-                <input type="text" id="s-sector" placeholder="Secteur (ex: Fintech)" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
-                <textarea id="s-desc" placeholder="Description courte..." class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none h-24" required></textarea>
-                <button type="submit" class="w-full bg-green-600 py-4 rounded-xl font-black uppercase text-sm shadow-lg">Enregistrer Startup</button>
-            </form>
-        </section>
-
-        <section id="page-entreprises" class="page-content hidden">
-            <h2 class="text-xl font-black mb-6 uppercase italic text-center">Annuaire M3</h2>
-            <div id="startups-list" class="grid grid-cols-2 gap-4"></div>
-        </section>
-
-        <section id="page-auth" class="page-content hidden py-10">
-            <div class="bg-[#161e2f] p-8 rounded-3xl border border-yellow-500/20 shadow-2xl text-center">
-                <h2 class="text-2xl font-black mb-6 text-yellow-500 uppercase italic">Rejoindre M3</h2>
-                <form class="space-y-4" onsubmit="handleRegister(event)">
-                    <input type="text" id="reg-username" placeholder="Pseudo" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 outline-none text-white focus:border-yellow-500" required>
-                    <button type="submit" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black uppercase text-sm">Ouvrir mon Compte</button>
-                </form>
-            </div>
-        </section>
-
-        <section id="page-profile" class="page-content hidden text-center">
-            <div id="prof-img" class="w-20 h-20 bg-slate-800 rounded-full mx-auto flex items-center justify-center text-3xl border-4 border-yellow-500 mb-4 font-black">?</div>
-            <h2 id="prof-name" class="text-2xl font-black uppercase italic">Utilisateur</h2>
-            <p class="text-yellow-500 text-[10px] font-black uppercase tracking-widest mb-6 italic">Membre Certifié M3</p>
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <p class="text-[10px] text-slate-500 font-bold uppercase mb-1">Balance Actuelle</p>
-                <p id="prof-balance" class="text-4xl font-black italic">0.00 $</p>
-            </div>
-        </section>
-    </main>
-
-    <footer class="fixed bottom-0 left-0 w-full bg-[#0f172a] border-t border-slate-800 flex justify-around py-4 z-50">
-        <button onclick="showPage('home')" class="text-slate-500 hover:text-yellow-500"><i class="fa-solid fa-trophy text-lg"></i></button>
-        <button onclick="showPage('entreprises')" class="text-slate-500 hover:text-yellow-500"><i class="fa-solid fa-list-ul text-lg"></i></button>
-        <button onclick="showPage('add-startup')" class="text-slate-400 hover:text-green-500 text-2xl"><i class="fa-solid fa-circle-plus"></i></button>
-        <button onclick="showPage('profile')" class="text-slate-500 hover:text-yellow-500"><i class="fa-solid fa-user text-lg"></i></button>
-    </footer>
-
-    <div id="bet-slip" class="fixed bottom-20 left-4 right-4 bg-yellow-500 text-black p-4 rounded-xl font-black flex justify-between items-center hidden z-[70] shadow-2xl">
-        <span id="bet-info" class="text-xs uppercase">Pari</span>
-        <button onclick="alert('💰 Pari validé !'); document.getElementById('bet-slip').classList.add('hidden')" class="bg-black text-white px-4 py-2 rounded-lg text-[10px]">Confirmer</button>
+        </div>
     </div>
 
     <script>
-        let currentUser = null;
+        let user = null;
+        let selectedStartup = null;
 
-        function toggleMenu() {
-            document.getElementById('side-menu').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('hidden');
-        }
-
-        function showPage(pId) {
+        function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById('page-' + pId).classList.remove('hidden');
-            if(pId === 'entreprises') loadStartups();
-            window.scrollTo(0,0);
+            document.getElementById('page-'+id).classList.remove('hidden');
+            if(id === 'home') loadLiveBets();
+            if(id === 'admin') loadAdminUsers();
+            toggleMenu(false);
         }
 
-        function selectOdd(name, odd) {
-            document.getElementById('bet-info').innerText = name + " @ " + odd;
-            document.getElementById('bet-slip').classList.remove('hidden');
-        }
-
-        // --- FONCTIONS DB ---
-        async function handleRegister(e) {
-            e.preventDefault();
-            const res = await fetch('/api/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username: document.getElementById('reg-username').value})
-            });
-            if(res.ok) {
-                currentUser = await res.json();
-                updateUI();
-                showPage('profile');
-            }
-        }
-
-        function updateUI() {
-            if(!currentUser) return;
-            document.getElementById('prof-name').innerText = currentUser.username;
-            document.getElementById('prof-balance').innerText = currentUser.balance.toLocaleString() + " $";
-            document.getElementById('nav-balance').innerText = currentUser.balance.toLocaleString() + " $";
-            document.getElementById('prof-img').innerText = currentUser.username.substring(0,1).toUpperCase();
-        }
-
-        async function handleAddStartup(e) {
-            e.preventDefault();
-            const data = {
-                name: document.getElementById('s-name').value,
-                age: document.getElementById('s-age').value,
-                sector: document.getElementById('s-sector').value,
-                description: document.getElementById('s-desc').value
-            };
-            const res = await fetch('/api/add-startup', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            if(res.ok) { alert("🚀 Startup enregistrée !"); showPage('entreprises'); }
-        }
-
-        async function loadStartups() {
-            const cont = document.getElementById('startups-list');
-            cont.innerHTML = "<p class='col-span-2 text-xs italic opacity-50'>Chargement...</p>";
+        async function loadLiveBets() {
             const res = await fetch('/api/startups');
-            const data = await res.json();
-            cont.innerHTML = data.map(s => `
-                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 relative shadow-lg">
-                    <button onclick="deleteS('${s._id}')" class="absolute top-2 right-2 text-red-600/40 hover:text-red-500"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
-                    <div class="w-10 h-10 bg-blue-500/10 rounded mx-auto mb-2 flex items-center justify-center font-black text-blue-500 text-xs">${s.name.substring(0,2).toUpperCase()}</div>
-                    <p class="text-[10px] font-black uppercase truncate">${s.name}</p>
-                    <p class="text-[8px] text-yellow-500 font-black uppercase mt-1">${s.sector}</p>
+            const startups = await res.json();
+            const container = document.getElementById('live-bets-container');
+            container.innerHTML = startups.map(s => `
+                <div class="bg-[#161e2f] p-4 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-black uppercase text-sm">${s.name}</p>
+                            <p class="text-[9px] text-green-500 uppercase font-bold">${s.sector}</p>
+                        </div>
+                        <button onclick="openBet('${s.name}', '${s._id}')" class="bg-yellow-500 text-black px-6 py-3 rounded-xl font-black text-xs italic transition-transform active:scale-90">1.95</button>
+                    </div>
                 </div>
             `).join('');
         }
 
-        async function deleteS(id) {
-            if(confirm("Supprimer ?")) {
-                await fetch(`/api/delete-startup/${id}`, {method: 'DELETE'});
-                loadStartups();
+        async function loadAdminUsers() {
+            const res = await fetch('/api/admin/users');
+            const users = await res.json();
+            document.getElementById('admin-user-list').innerHTML = users.map(u => `
+                <tr class="border-b border-slate-800 italic">
+                    <td class="p-3 font-bold">${u.username}</td>
+                    <td class="p-3 text-yellow-500">${u.balance.toLocaleString()} $</td>
+                </tr>
+            `).join('');
+        }
+
+        function openBet(name, id) {
+            if(!user) return alert("Veuillez créer un compte d'abord !");
+            selectedStartup = id;
+            document.getElementById('bet-target').innerText = name;
+            document.getElementById('bet-modal').classList.remove('hidden');
+        }
+
+        function closeBet() { document.getElementById('bet-modal').classList.add('hidden'); }
+
+        async function confirmRealBet() {
+            const amount = document.getElementById('bet-amount').value;
+            const res = await fetch('/api/place-bet', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ userId: user._id, amount: parseInt(amount) })
+            });
+            const data = await res.json();
+            if(data.success) {
+                user.balance = data.newBalance;
+                document.getElementById('user-display').innerText = user.balance.toLocaleString() + " $";
+                alert("✅ Pari de " + amount + "$ accepté !");
+                closeBet();
+            } else {
+                alert("❌ " + data.error);
             }
         }
+
+        // Simuler ou charger l'utilisateur après inscription
+        // (Réutilise ta fonction handleRegister ici pour assigner la réponse à 'user')
     </script>
 </body>
 </html>
