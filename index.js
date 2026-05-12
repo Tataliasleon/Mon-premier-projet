@@ -5,14 +5,15 @@ const app = express();
 app.use(express.static('public')); 
 app.use(express.json());
 
-// CONNEXION MONGODB
+// --- CONNEXION MONGODB ---
+// Remplace TON_LIEN_MONGODB_ATLAS_ICI par ton vrai lien
 const mongoURI = process.env.MONGO_URI || "TON_LIEN_MONGODB_ATLAS_ICI";
 
 mongoose.connect(mongoURI)
     .then(() => console.log("✅ DB Connectée"))
     .catch(err => console.error("❌ Erreur DB:", err));
 
-// SCHÉMAS
+// --- MODÈLES ---
 const Startup = mongoose.model('Startup', new mongoose.Schema({
     name: String, sector: String, description: String
 }));
@@ -21,7 +22,7 @@ const User = mongoose.model('User', new mongoose.Schema({
     username: String, balance: { type: Number, default: 2500 }
 }));
 
-// ROUTES
+// --- ROUTES ---
 app.post('/api/register', async (req, res) => {
     const user = new User({ username: req.body.username });
     await user.save(); res.json(user);
