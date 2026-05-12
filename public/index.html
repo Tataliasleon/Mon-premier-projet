@@ -1,147 +1,47 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3 PRO PLATFORM</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .hidden { display: none; }
-        .side-menu { transition: 0.3s ease; transform: translateX(-100%); }
-        .side-menu.open { transform: translateX(0); }
-        body { background: #050810; color: white; }
-    </style>
-</head>
-<body class="pb-20">
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
 
-    <nav class="p-4 bg-[#0f172a] border-b border-yellow-500/20 flex justify-between sticky top-0 z-50">
-        <button onclick="toggleMenu()"><i class="fa-solid fa-bars text-xl"></i></button>
-        <div class="font-black italic text-xl uppercase">M3 <span class="text-yellow-500">BET</span></div>
-        <div id="nav-balance" class="text-yellow-500 font-bold">0.00 $</div>
-    </nav>
+app.use(express.static('public')); 
+app.use(express.json());
 
-    <div id="side-menu" class="side-menu fixed inset-y-0 left-0 w-72 bg-[#0f172a] z-[60] border-r border-slate-800">
-        <div class="p-6 bg-yellow-500 text-black font-black flex justify-between">MENU <button onclick="toggleMenu()">&times;</button></div>
-        <div class="p-4 space-y-2">
-            <button onclick="showPage('home')" class="w-full text-left p-4 hover:bg-slate-800 rounded-xl"><i class="fa-solid fa-trophy mr-3"></i> Paris Live</button>
-            <button onclick="showPage('add')" class="w-full text-left p-4 hover:bg-slate-800 rounded-xl"><i class="fa-solid fa-plus mr-3"></i> Inscrire Startup</button>
-            <button onclick="showPage('admin')" class="w-full text-left p-4 hover:bg-red-900 rounded-xl text-red-400 font-bold"><i class="fa-solid fa-user-shield mr-3"></i> Admin Dashboard</button>
-        </div>
-    </div>
+// CONNEXION MONGODB
+const mongoURI = process.env.MONGO_URI || "TON_LIEN_MONGODB_ATLAS_ICI";
 
-    <main class="p-4">
-        <section id="page-home" class="page-content">
-            <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Startups en compétition</h2>
-            <div id="bet-list" class="space-y-4"></div>
-        </section>
+mongoose.connect(mongoURI)
+    .then(() => console.log("✅ DB Connectée"))
+    .catch(err => console.error("❌ Erreur DB:", err));
 
-        <section id="page-admin" class="page-content hidden">
-            <h2 class="text-xl font-black mb-6 text-red-500 italic uppercase">Gestion des Membres</h2>
-            <div id="admin-list" class="bg-[#161e2f] rounded-2xl border border-slate-800 divide-y divide-slate-800"></div>
-        </section>
+// SCHÉMAS
+const Startup = mongoose.model('Startup', new mongoose.Schema({
+    name: String, sector: String, description: String
+}));
 
-        <section id="page-add" class="page-content hidden">
-            <h2 class="text-xl font-black mb-6 uppercase">Inscrire ma Tech</h2>
-            <form onsubmit="addS(event)" class="space-y-4">
-                <input type="text" id="s-name" placeholder="Nom" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
-                <input type="text" id="s-sector" placeholder="Secteur" class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 outline-none" required>
-                <button class="w-full bg-green-600 py-4 rounded-xl font-black uppercase shadow-lg">Valider</button>
-            </form>
-        </section>
+const User = mongoose.model('User', new mongoose.Schema({
+    username: String, balance: { type: Number, default: 2500 }
+}));
 
-        <section id="page-join" class="page-content hidden py-10">
-            <div class="bg-[#161e2f] p-8 rounded-3xl border border-yellow-500/20 text-center">
-                <h2 class="text-2xl font-black mb-6 text-yellow-500 uppercase italic">Join M3 Pro</h2>
-                <input type="text" id="reg-name" placeholder="Votre Pseudo" class="w-full bg-[#050810] p-4 rounded-xl border border-slate-800 mb-4 text-white">
-                <button onclick="register()" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black uppercase">Ouvrir mon compte</button>
-            </div>
-        </section>
-    </main>
+// ROUTES
+app.post('/api/register', async (req, res) => {
+    const user = new User({ username: req.body.username });
+    await user.save(); res.json(user);
+});
 
-    <div id="bet-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-6">
-        <div class="bg-[#161e2f] w-full max-w-sm rounded-3xl p-8 border border-yellow-500/30">
-            <h3 id="bet-target" class="text-xl font-black italic mb-6">Nom Startup</h3>
-            <input type="number" id="bet-amount" value="100" class="w-full bg-[#050810] border border-slate-700 p-4 rounded-xl text-2xl font-black text-yellow-500 mb-6 text-center outline-none">
-            <div class="flex gap-3">
-                <button onclick="closeBet()" class="flex-1 bg-slate-800 py-4 rounded-xl font-bold">Annuler</button>
-                <button onclick="confirmBet()" class="flex-1 bg-yellow-500 text-black py-4 rounded-xl font-black uppercase">Confirmer</button>
-            </div>
-        </div>
-    </div>
+app.get('/api/users', async (req, res) => res.json(await User.find()));
+app.get('/api/startups', async (req, res) => res.json(await Startup.find()));
+app.post('/api/add-startup', async (req, res) => {
+    const s = new Startup(req.body); await s.save(); res.json(s);
+});
 
-    <footer class="fixed bottom-0 left-0 w-full bg-[#0f172a] border-t border-slate-800 flex justify-around py-4 z-40">
-        <button onclick="showPage('home')"><i class="fa-solid fa-trophy text-lg"></i></button>
-        <button onclick="showPage('add')"><i class="fa-solid fa-circle-plus text-2xl text-green-500"></i></button>
-        <button onclick="showPage('join')"><i class="fa-solid fa-user-plus text-lg text-yellow-500"></i></button>
-    </footer>
+app.post('/api/place-bet', async (req, res) => {
+    const { userId, amount } = req.body;
+    const user = await User.findById(userId);
+    if (user && user.balance >= amount) {
+        user.balance -= amount;
+        await user.save();
+        res.json({ success: true, newBalance: user.balance });
+    } else { res.status(400).json({ error: "Solde insuffisant" }); }
+});
 
-    <script>
-        let me = null;
-        let activeS = null;
-
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
-        function showPage(id) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById('page-'+id).classList.remove('hidden');
-            if(id === 'home') loadBets();
-            if(id === 'admin') loadUsers();
-            if(id !== 'join' && id !== 'add') toggleMenu();
-        }
-
-        async function register() {
-            const name = document.getElementById('reg-name').value;
-            const res = await fetch('/api/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:name}) });
-            me = await res.json();
-            updateUI();
-            showPage('home');
-        }
-
-        function updateUI() {
-            if(me) document.getElementById('nav-balance').innerText = me.balance.toLocaleString() + " $";
-        }
-
-        async function addS(e) {
-            e.preventDefault();
-            const data = { name:document.getElementById('s-name').value, sector:document.getElementById('s-sector').value };
-            await fetch('/api/add-startup', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
-            alert("Startup ajoutée !"); showPage('home');
-        }
-
-        async function loadBets() {
-            const res = await fetch('/api/startups');
-            const data = await res.json();
-            const cont = document.getElementById('bet-list');
-            cont.innerHTML = data.map(s => `
-                <div class="bg-[#161e2f] p-5 rounded-2xl border border-slate-800 flex justify-between items-center">
-                    <div><p class="font-black uppercase text-sm">${s.name}</p><p class="text-[9px] text-blue-400 font-bold">${s.sector}</p></div>
-                    <button onclick="openBet('${s.name}', '${s._id}')" class="bg-yellow-500 text-black px-6 py-3 rounded-xl font-black italic text-xs">1.95</button>
-                </div>
-            `).join('');
-        }
-
-        async function loadUsers() {
-            const res = await fetch('/api/users');
-            const data = await res.json();
-            document.getElementById('admin-list').innerHTML = data.map(u => `
-                <div class="p-4 flex justify-between items-center italic">
-                    <span class="font-bold">${u.username}</span>
-                    <span class="text-yellow-500 font-black">${u.balance.toLocaleString()} $</span>
-                </div>
-            `).join('');
-        }
-
-        function openBet(n, id) { if(!me) return showPage('join'); activeS = id; document.getElementById('bet-target').innerText = n; document.getElementById('bet-modal').classList.remove('hidden'); }
-        function closeBet() { document.getElementById('bet-modal').classList.add('hidden'); }
-
-        async function confirmBet() {
-            const amt = parseInt(document.getElementById('bet-amount').value);
-            const res = await fetch('/api/place-bet', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({userId:me._id, amount:amt}) });
-            const data = await res.json();
-            if(data.success) {
-                me.balance = data.newBalance; updateUI(); closeBet(); alert("Pari accepté !");
-            } else { alert(data.error); }
-        }
-    </script>
-</body>
-</html>
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 M3 Pro sur port ${PORT}`));
